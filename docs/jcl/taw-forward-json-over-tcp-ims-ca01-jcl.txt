@@ -1,0 +1,50 @@
+//TAWFWD   JOB NOTIFY=&SYSUID
+//*
+//* z/OS JCL
+//*
+//* Uses IBM Transaction Analysis Workbench for z/OS (TAW)
+//* to forward the following record type as JSON Lines over
+//* TCP to Logstash (Elastic Stack) or Splunk:
+//*
+//* -  IMS transaction index
+//*
+//FUWBATCH EXEC PGM=FUWBATCH
+//STEPLIB  DD DISP=SHR,
+//            DSN=FUW130.DEVT.SFUWLINK
+//SYSPRINT DD SYSOUT=*
+//LOGIN001 DD DISP=SHR,
+//            DSN=<ims.slds>
+//SYSIN    DD *
+IMSVRM(<vrm>) /* e.g. 151 for IMS version 15
+IMSINDEX
+OUTZONE(Z)
+STREAM NAME(OADATA) +
+       TRANSPORT(TCP) +
+       HOST(<Splunk or Elastic host name>) +
+       PORT(<Splunk or Logstash TCP input port number>)
+JSON CODE(IMS:CA01) +
+     TIMEFORMAT(ISO8601) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS(
+  trancode
+  program
+  userid
+  imsid
+  regtype
+  inputq
+  process
+  outputq
+  totaltm
+  respims
+  cputime
+  fpwaits
+  compcode
+  tpesaf
+  ffcalls
+  schedtm
+  tptdbio
+  tptdbpl
+  syncelap
+)
+/*

@@ -1,0 +1,66 @@
+//TAWFWD   JOB NOTIFY=&SYSUID
+//*
+//* z/OS JCL
+//*
+//* Uses IBM Transaction Analysis Workbench for z/OS (TAW)
+//* to forward the following record type as JSON Lines over
+//* TCP to Logstash (Elastic Stack) or Splunk:
+//*
+//* -  CICS monitoring facility (CMF) performance class
+//*
+//FUWBATCH EXEC PGM=FUWBATCH
+//STEPLIB  DD DISP=SHR,
+//            DSN=<fuw.sfuwlink>
+//SYSPRINT DD SYSOUT=*
+//SMFIN001 DD DISP=SHR,
+//*           DSN=<cmf.smf>
+//SYSIN    DD *
+OUTZONE(Z)
+STREAM NAME(OADATA) +
+       TRANSPORT(TCP) +
+       HOST(<Splunk or Elastic host name>) +
+       PORT(<Splunk or Logstash TCP input port number>)
+JSON CODE(CMF) +
+     TIMEFORMAT(ISO8601) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS( /* CMF field names (where they exist), not FUW field names
+  applid
+  tran
+  usrdispt
+  usrcput
+  susptime
+  trannum
+  dispwtt
+  dspdelay
+  rmitime
+  jvmtime
+  qrcput
+  l8cput
+  cputoncp
+  cputonsp
+  response /* Derived field, not provided by CMF
+  userid
+  otran
+  fciowtt
+  fcamct
+  db2reqct
+  imsreqct
+  wmqreqct
+  pgmname
+  synctime
+  jciowtt
+  pcstghwm
+  term
+  iriowtt
+  tdiowtt
+  abcodeo
+  dschmdly
+  qrmoddly
+  tswait
+  icdelay
+  lmdelay
+  rmisusp
+  pcloadtm
+)
+/*

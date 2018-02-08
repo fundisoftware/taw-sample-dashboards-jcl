@@ -1,0 +1,11 @@
+.token.name {
+	color: #a67f59;
+}
+.token.placeholder {
+	color: slategray;
+	background-color: #FFFF90;
+	font-style: italic;
+}
+.token.operation {
+	color: #07a;
+}

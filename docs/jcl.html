@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<body>
+<script src="js/borgme.js"></script>
+<h1>JCL for each log record type</h1>
+<p>Most of the example JCL listings presented here demonstrate standalone jobs for forwarding a single log record type.</p>
+<h2>Getting the JCL as text files</h2>
+<p>You can also get these JCL listings directly from the Git repository directory:</p>
+<pre><code>docs/jcl/</code></pre>
+<h2>Editing <code class="language-jcl">&lt;placeholder&gt;</code> values in the JCL</h2>
+<p>The JCL listings use the common convention of enclosing placeholder values in angle brackets. For example:</p>
+<pre><code class="language-jcl">//            DSN=&lt;fuw.sfuwlink&gt;
+</code></pre>
+<p>The placeholders represent values that you need to supply.</p> 
+<p>Before submitting the JCL, you need to replace these placeholders, including the angle brackets, with actual values, such as the data set name of the Workbench load library:</p> 
+<pre><code class="language-jcl">//            DSN=FUW.PROD.SFUWLINK
+</code></pre><h2>Forwarding multiple log record types in a single step</h2>
+<p>You can choose to forward multiple log record types in a single job step. In the SYSIN data set, specify one <code>JSON</code> command per record type.
+For example, the following JCL forwards two log record types, CICS performance and Db2 accounting, from a single SMF file.
+This combination of record types is useful for CICS-Db2 transaction analysis.</p>
+<pre><code class="language-jcl">//FUWBATCH EXEC PGM=FUWBATCH
+//STEPLIB  DD DISP=SHR,
+//            DSN=&lt;fuw.sfuwlink&gt;
+//SYSPRINT DD SYSOUT=*
+//SMFIN001 DD DISP=SHR,
+//*           DSN=&lt;SMF file of CICS performance and Db2 accounting records&gt;
+//SYSIN    DD *
+OUTZONE(Z)
+STREAM NAME(OADATA) +
+       TIMEFORMAT(ISO8601) +
+       TRANSPORT(TCP) +
+       HOST(&lt;Splunk or Elastic host name&gt;) +
+       PORT(&lt;Splunk or Logstash TCP input port number&gt;)
+
+JSON CODE(CMF) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS(&lt;CICS performance field names&gt;)
+
+JSON CODE(DTR:003) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS(&lt;Db2 accounting field names&gt;)
+/*</code></pre>
+<p>You can also forward multiple log record types from <i>multiple different</i> sources in a single job step.
+For example, IMS transaction indexes based on IMS log records, and Db2 accounting records from SMF.</p>
+</p> 
+<p>For details, see the <a href="http://www.ibm.com/support/knowledgecenter/SSKKZM">Workbench product documentation</a> in IBM Knowledge Center.</p>
+</body>
+</html>

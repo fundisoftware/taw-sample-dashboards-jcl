@@ -1,0 +1,507 @@
+@import "https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.css";
+
+:root {
+  /* Carbon Design System colors */
+  --carbon-color-brand-01: #3d70b2;
+  --carbon-color-brand-02: #5596e6;
+  --carbon-color-text-01: #152934;
+  --carbon-color-ui-01: #ffffff;
+  --carbon-color-ui-02: #f5f7fa;
+  --carbon-color-ui-04: #dfe3e6;
+  --carbon-color-ui-05: #8c9ba5;
+  --carbon-color-support-01: #e71d32;
+  --carbon-color-inverse-01: #ffffff;
+
+  /* Map colors to components */
+  --header-background-color: var(--carbon-color-brand-01);
+
+  --control-color: var(--carbon-color-ui-01);
+  --control-background-color: #909090;
+  --control-background-color-hover: #000000; /* Want blue? var(--carbon-color-brand-02) */
+
+  --title-color: #ffffff;
+  --title-background-color: #606060; /* #111111 */
+
+  --toc-entry-color: #909090;
+  --toc-link-color: #303030;
+  --toc-current-entry-color: #000000;
+  
+  --breadcrumb-separator-color: #606060;
+
+  --default-annotation-color: #ffffff;
+  --default-annotation-background-color: #909090;
+
+  --to-do-toc-entry-color: #ffa0a0;
+  
+  --to-do-annotation-color: #ffffff;
+  --to-do-annotation-background-color: #ff6060;
+
+  --error-color: var(--carbon-color-inverse-01);
+  --error-background-color: var(--carbon-color-support-01);
+  
+  --code-block-background-color: #f5f2f0; /* from Prism syntax highlighter */
+  --sidebar-background-color: #f5f2f0; /* Same as code, for now */
+  
+  --border-color: #909090; /* Also used for background shading when printing */
+
+  /* Spacing */
+  --content-margin: 1rem;
+  --header-height: 3rem;
+  
+  /* Fonts */
+  --body-font-family: "IBM Plex Sans", sans-serif;
+}
+
+@media screen and (max-width: 35rem) { /* CSS variables don't (yet?) work in media queries */
+  :root {
+    --header-height: 6rem;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+html {
+  font-size: 100%; /* font-size 1em = 16px */
+}
+html, body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  color: #000000;
+  background-color: #ffffff;
+}
+body, button {
+  font-family: var(--body-font-family);
+  font-size: 1rem;
+}
+body {
+  display: block;
+  background-color: #ffffff;
+}
+main h1, main h2, h3, h4, p, li, dl {
+  line-height: 1.5; /* Relative to font size */
+}
+main h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+main h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #909090;
+}
+h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 1em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+h4 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-top: 1em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+div.container-16x9 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--border-color);
+}
+table {
+  width: calc(100% - (var(--content-margin) * 2));
+}
+
+@media screen {
+  #body {
+    max-width: 60rem;
+    margin: 0 auto;
+  }
+  header {
+    height: var(--header-height);
+  }
+  header > h1 {
+  	font-size: 1rem;
+  	line-height: 1;
+  	margin: 0;
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+  	color: var(--title-color);
+    background: linear-gradient(to right, var(--title-background-color), var(--control-background-color) 25rem); /* Blend into toolbar background */
+  }
+  a {
+    color: #0000C0;
+  }
+}
+@media print {
+  h1 {
+  font-size: xx-large;
+  }
+  a {
+    color: #000000;
+  }
+}
+.super {
+  font-size: 0.75em;
+  vertical-align: super;
+}
+pre, code, kbd, samp, tt, textarea /* Fixes font size bug in Firefox and Chrome */ {
+  font-family: "IBM Plex Mono", monospace, monospace;
+}
+dt.default::after, code.default::after {
+  display: inline-block;
+  font-family: var(--body-font-family); /* Overrides code font */
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.5rem;
+  content: "default";
+  font-weight: normal;
+  color: var(--default-annotation-color);
+  background-color: var(--default-annotation-background-color);
+  /* text-decoration: underline; */
+}
+pre,
+pre[class*=language-] /* Override styles defined by syntax highlighters */ {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: var(--code-block-background-color);
+  white-space: pre-wrap;
+}
+ul {
+  margin-left: 1rem;
+  padding: 0;
+  list-style-type: square;
+}
+ol {
+  margin-left: 1.5rem;
+  padding: 0;
+  list-style-type: arabic;
+}
+ol ol {
+  list-style-type: lower-alpha;
+}
+ol ol ol {
+  list-style-type: lower-roman;
+}
+ul li {
+  margin-left: 0;
+  padding-left: 1rem;
+}
+ol li {
+  margin-left: 0;
+  padding-left: 0.5rem;
+}
+p, ul, ol, li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+dt {
+  margin-top: 0.5rem;
+}
+dd {
+  margin-left: 2rem;
+}
+blockquote {
+  border-left: 1px solid #909090;
+  padding-left: 2rem;
+}
+table {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+table caption {
+  font-style: italic;
+  text-align: left;
+  padding: 0.5rem;
+  margin-bottom: 0;
+}
+th {
+  vertical-align: bottom;
+  text-align: left;
+  background-color: #F0F0F0;
+}
+td {
+  vertical-align: top;
+}
+td, th {
+  border: 1px solid var(--border-color);
+  padding: 0.5em;
+}
+dt {
+  font-weight: bold;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+span.normal {
+  font-weight: normal;
+  font-style: normal;
+}
+span.reverse {
+  background-color: #000000;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 0 0.3em 0 0.3em;
+}
+span.highlight {
+  background-color: #FFFF00;
+  padding: 0 0.3em 0 0.3em;
+}
+table.invisible td {
+  border: none;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+}
+table.nowrap-first-column td:first-child,
+table.nowrap-first-column th:first-child {
+  white-space: nowrap;
+}
+address {
+  font-style: normal;
+}
+div.frame {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #909090;
+}
+ul.simple {
+  list-style-type: none;
+}
+ul.compact li {
+  margin: 0;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+.breadcrumb-separator {
+  color: var(--breadcrumb-separator-color);
+  font-family: var(--body-font-family), "Segoe UI Symbol"; /* Workaround for bug in Edge (Microsoft Edge issue #11635143) */
+}
+.breadcrumbs {
+  color: var(--toc-entry-color);
+}
+.breadcrumbs a {
+  color: var(--toc-link-color);
+}
+
+/* TOC styles */
+#toc > ul:first-child > li:first-child,
+#toc > ul:first-child {
+  margin-top: 0;
+}
+#toc a {
+  color: var(--toc-link-color);
+}
+#toc li.to-do {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  background: repeating-linear-gradient( /* Gray and yellow diagonal stripes */
+    45deg,
+    #fffff0,
+    #fffff0 0.5rem,
+    #f9f9f9 0.5rem,
+    #f9f9f9 1rem);
+}
+#toc li {
+  color: var(--toc-entry-color);
+}
+#toc li.current > a {
+  color: var(--toc-current-entry-color);
+  font-weight: bold;
+}
+#toc ul {
+	list-style-type: none;
+}
+#toc li {
+	margin-left: 0;
+	padding-left: 0;
+}
+#toc > ul {
+	margin-left: 0;
+}
+#toc > ul ul {
+	margin-left: 1rem;
+}
+
+/* Previous/next topic navigation */
+@media screen {
+  #next-topic {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 10px;
+  }
+  #next-topic:hover {
+    background-color: var(--prev-next-topic-hover);
+  }
+}
+
+/* Toolbar */
+button:focus {
+  outline: 0;
+}
+#toolbar {
+  background-color: var(--control-background-color);
+  float: right;
+  min-height: 3rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+/* If the screen is narrow, place the toolbar below the title */  
+@media screen and (max-width: 35rem) {
+  header > h1 {
+    background: none; /* Remove the gradient background */
+    background-color: var(--title-background-color);
+  }
+  #toolbar {
+    top: 3rem;
+    width: 100%;
+  }
+}
+#toolbar > * {
+  color: var(--control-color);
+  background-color: var(--control-background-color);
+  transition: background-color .4s linear;
+  border: none;
+  padding: 1rem;
+}
+#toolbar > *:hover {
+  background-color: var(--control-background-color-hover);
+}
+#control-next-topic,
+#control-previous-topic {
+  float: right;
+}
+button {
+  line-height: 1;
+}
+
+/* Misc styles */
+code > object { /* Hide object children of code elements */
+  height: 0;
+  visibility: hidden;
+}
+span.error {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  color: var(--error-color);
+  background-color: var(--error-background-color);
+}
+.small {
+  font-size: 0.7rem;
+}
+div.sidebar {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  background-color: var(--sidebar-background-color);
+}
+
+/* Split styles */
+@media screen { 
+  #toc, #content, .gutter.gutter-horizontal {
+    height: 100%;
+    float: left;
+  }
+  #toc, #content {
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  #toc, #content {
+    padding: var(--content-margin);
+  }
+  header {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+  main {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: var(--header-height);
+    height: calc(100% - var(--header-height));
+  }
+  .gutter {
+     background-color: #eeeeee;
+     background-repeat: no-repeat;
+     background-position: 50%;
+  }
+  .gutter.gutter-horizontal {
+    cursor: ew-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')
+  }
+}
+
+@media print {
+  header,
+  #toc,
+  .gutter {
+    display: none;
+  }
+  #body {
+    max-width: none;
+  }
+  #content {
+    position: relative;
+    float: none;
+    width: 100% !important; /* Override style attribute created by Split */
+  }
+  tr, iframe, div[class*=container-], div.sidebar, pre {
+    page-break-inside: avoid;
+  }
+  /* Minimize large areas of background shading */
+  div.sidebar, pre {
+    background: none;
+    border: 1px solid var(--border-color);
+  }
+  code {
+    background: none;
+  }
+  /* Avoid page breaks immediately after these elements */
+  h1, h2, h3, h4 {
+    break-after: avoid;
+  }
+  /* Do not print dynamically generated lists of child topics */
+  div.child-topics {
+    display: none;
+  }
+  /* Fix for overflow when printing in Firefox */
+  * {
+     overflow: visible !important;
+  }
+}
+
+@page {
+  margin: 1in;
+}

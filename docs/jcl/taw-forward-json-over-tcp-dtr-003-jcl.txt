@@ -1,0 +1,131 @@
+//TAWFWD   JOB NOTIFY=&SYSUID
+//*
+//* z/OS JCL
+//*
+//* Uses IBM Transaction Analysis Workbench for z/OS (TAW)
+//* to forward the following record type as JSON Lines over
+//* TCP to Logstash (Elastic Stack) or Splunk:
+//*
+//* -  DB2 accounting (IFCID 003)
+//*
+//FUWBATCH EXEC PGM=FUWBATCH
+//STEPLIB  DD DISP=SHR,
+//            DSN=<fuw.sfuwlink>
+//SYSPRINT DD SYSOUT=*
+//SMFIN001 DD DISP=SHR,
+//*           DSN=<dtr.smf>
+//SYSIN    DD *
+OUTZONE(Z)
+STREAM NAME(OADATA) +
+       TRANSPORT(TCP) +
+       HOST(<Splunk or Elastic host name>) +
+       PORT(<Splunk or Logstash TCP input port number>)
+JSON CODE(DTR:003) +
+     TIMEFORMAT(ISO8601) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS(
+  sm101sid
+  sm101ssi
+  et1
+  cpu1
+  et2
+  cpu2
+  suspend
+  response
+  qwaccomm
+  qwacabrt
+  qwacajst
+  qwacawti
+  qwacawtl
+  qwacawtr
+  qwacawtw
+  qwacawte
+  qwacawlh
+  qwacawlg
+  qwacalbw
+  qwacaacw
+  qwacawtp
+  qwacawtg
+  qwacawtj
+  qwacspcp
+  qwacsptt
+  qwaccast
+  qwacpcnt
+  qwaclrn
+  qwaclrab
+  qwacudcp
+  qwacudeb
+  qwactrtt
+  qwactret
+  qwacspea
+  qwacspeb
+  qwactrte
+  qwactree
+  qwacsvpt
+  qwacrlsv
+  qwacrbsv
+  qwacawtk
+  qwacawtm
+  qwacawtn
+  qwacawto
+  qwacawtq
+  qwaccls1_ziip
+  qwaccls2_ziip
+  qwactrtt_ziip
+  qwacziip_eligible
+  qwacspnf_ziip
+  qwacudfnf_ziip
+  qwacspnf_elap
+  qwacspnf_cp
+  qwacudfnf_elap
+  qwacudfnf_cp
+  qwacsp_cls1se
+  qwacsp_cls2se
+  qwacudf_cls1se
+  qwacudf_cls2se
+  qwactrte_se
+  qwac_at_wait
+  qwac_at_count
+  qwac_pt_count
+  qmdactyp
+  qwaxalog
+  qwaxawdr
+  qwaxawcl
+  qwaxawar
+  qwaxocse
+  qwaxslse
+  qwaxdsse
+  qwaxotse
+  qwaxawfc
+  qwaxixlt
+  qtxadea
+  qtxasloc
+  qtxatim
+  qtxanpl
+  qxselect
+  qxinsrt
+  qxupdte
+  qxdelet
+  qxdesc
+  qxprep
+  qxopen
+  qxclose
+  qxfetch
+  qxcall
+  qxcallab
+  qxcallto
+  qxcallrj
+  qxrwsfetchd
+  qxrwsinsrtd
+  qxrwsupdtd
+  qxrwsdeletd
+  qbacget
+  qbacsws
+  qwhcctr
+  qwhccn
+  qwhcplan
+  qwhcopid
+  qwhcipsb
+)
+/*

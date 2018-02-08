@@ -1,0 +1,67 @@
+//TAWFWD   JOB NOTIFY=&SYSUID
+//*
+//* z/OS JCL
+//*
+//* Uses IBM Transaction Analysis Workbench for z/OS (TAW)
+//* to forward the following record type as JSON Lines over
+//* TCP to Logstash (Elastic Stack) or Splunk:
+//*
+//* -  OMEGAMON for IMS ATF enhanced summary (AES) records
+//*
+//FUWBATCH EXEC PGM=FUWBATCH
+//STEPLIB  DD DISP=SHR,
+//            DSN=<fuw.sfuwlink>
+//SYSPRINT DD SYSOUT=*
+//LOGIN001 DD DISP=SHR,
+//            DSN=<ims.slds>
+//SYSIN    DD *
+IMSVRM(<vrm>) /* e.g. 151 for IMS version 15
+ATF(<A2>) /* Replace with your site-specific code for ATF records
+OUTZONE(Z)
+STREAM NAME(OADATA) +
+       TRANSPORT(TCP) +
+       HOST(<Splunk or Elastic host name>) +
+       PORT(<Splunk or Logstash TCP input port number>)
+* Forward as type atf-aes, not the default such as 
+* atf-a201, because "a2" in this context is user-defined
+JSON CODE(ATF:<A2>01) +
+     TYPE(atf-aes) +
+     TIMEFORMAT(ISO8601) +
+     TOKENS(ALL) +
+     STREAM(OADATA)
+FIELDS(
+  aescorid  /* IMS ID
+  aescorpst /* PST number
+  aestran   /* IMS tran code
+  aespsb    /* Program
+  aeslterm  /* Lterm
+  aesusrid  /* User ID
+  aespgmsw# /* Number of switches
+  aesabcd   /* Abend code
+  aesrtype  /* Region type
+  aesjnam   /* Job name
+  aesxssmf  /* SMF ID
+  aesclass  /* Class of SMB
+  aesspal   /* SPA size
+  aesmsrc   /* PSTFLAG1
+  aesvsflg  /* PSTVSFLG
+  aesschf1  /* PSTSCHF1
+  aesmi     /* PSTMI
+  aescpu    /* Total CPU time
+  aesxsacp  /* Application CPU time
+  aescpud   /* Dependent region CPU time
+  aescpui   /* DLI CPU time
+  aescpub   /* DB2 CPU time
+  aescpuq   /* MQ CPU time
+  aescpuc   /* CTL CPU time
+  aescpus   /* DLISAS CPU time
+  aescpuo   /* Other CPU time
+  aesxsrsp  /* Response time
+  aeselaps  /* Process time
+  aesxsiqt  /* Input queue time
+  aeselti   /* DLI time
+  aeseltb   /* DB2 time
+  aeseltq   /* MQ time
+  aestwfi   /* WFI time
+)
+/*

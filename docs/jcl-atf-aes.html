@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<body>
+<script src="js/borgme.js"></script>
+<h1>atf-aes: OMEGAMON for IMS ATF</h1>
+<p>This JCL forwards IBM OMEGAMON for IMS on z/OS Application Trace Facility (ATF) summary log records
+that have been written to the IMS log.</p>
+<p>You need to customize this JCL to specify the IMS log code that ATF used to write those records to the log.
+You need to specify that log code in two places in the SYSIN data set:</p>
+<ul>
+<li>The <code>ATF</code> command</li>
+<li>The <code>CODE</code> parameter of the <code>JSON</code> command</li>
+</ul>
+<pre><code class="language-jcl"><object data="jcl/taw-forward-json-over-tcp-atf-aes-jcl.txt"></object></code></pre>
+</body>
+</html>
