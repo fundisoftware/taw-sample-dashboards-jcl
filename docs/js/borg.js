@@ -1,7 +1,8 @@
 "use strict";
 
 var pageborg = {
-  tocFilePath: "toc.html"
+  tocFilePath: "toc.html",
+  oldBrowserRedirectURL: "redirect-old-browser.html"
 }; /* The trailing semicolon is significant before the opening parenthesis on the next line */
 
 (function(exports) {
@@ -16,6 +17,11 @@ var pageborg = {
   
   // Initialize on page load
   function initialize() {
+    
+    // Redirect old browsers that don't support the Fetch API
+    if (!window.fetch) {
+      window.location = pageborg.oldBrowserRedirectURL
+    }
     
     // Initialize the TOC pane splitter
     initializeSplit()
